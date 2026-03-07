@@ -1,0 +1,17 @@
+package com.realestate.brokerage_crm.config;
+
+import org.springframework.context.annotation.Configuration;
+
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+
+@Configuration
+@OpenAPIDefinition(
+    info = @Info(
+        title = "Brokerage CRM API",
+        version = "v1",
+        description = "API documentation for the Brokerage CRM application"
+    )
+)
+public class OpenApiConfig {
+}

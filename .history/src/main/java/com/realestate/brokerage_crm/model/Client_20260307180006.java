@@ -1,0 +1,13 @@
+package com.realestate.brokerage_crm.model;
+
+import jakarta.persistence.Entity;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+public class Client {
+    
+    
+}
