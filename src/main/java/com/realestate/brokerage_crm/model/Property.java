@@ -25,8 +25,8 @@ public class Property {
     private Agent agent;
 
     @ManyToOne
-    @JoinColumn(name = "city_id", nullable = false)
-    private City city;
+    @JoinColumn(name = "village_id", nullable = false)
+    private Village village;
 
     public Property() {
     }
@@ -71,11 +71,11 @@ public class Property {
         this.agent = agent;
     }
 
-    public City getCity() {
-        return city;
+    public Village getVillage() {
+        return village;
     }
 
-    public void setCity(City city) {
-        this.city = city;
+    public void setVillage(Village village) {
+        this.village = village;
     }
 }

@@ -9,6 +9,6 @@ import com.realestate.brokerage_crm.model.Property;
 
 @Repository
 public interface PropertyRepository extends JpaRepository<Property, Long> {
-    List<Property> findByCityId(Long cityId);
+    List<Property> findByVillageId(Long villageId);
     List<Property> findByAgentId(Long agentId);
 }

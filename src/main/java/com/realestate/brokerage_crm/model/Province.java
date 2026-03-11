@@ -28,9 +28,9 @@ public class Province {
     @Column(nullable = false)
     private String name;
 
-    @JsonManagedReference
+    @JsonManagedReference("province-districts")
     @OneToMany(mappedBy = "province", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<City> cities = new ArrayList<>();
+    private List<District> districts = new ArrayList<>();
 
     public Province() {
     }
@@ -59,11 +59,11 @@ public class Province {
         this.name = name;
     }
 
-    public List<City> getCities() {
-        return cities;
+    public List<District> getDistricts() {
+        return districts;
     }
 
-    public void setCities(List<City> cities) {
-        this.cities = cities;
+    public void setDistricts(List<District> districts) {
+        this.districts = districts;
     }
 }

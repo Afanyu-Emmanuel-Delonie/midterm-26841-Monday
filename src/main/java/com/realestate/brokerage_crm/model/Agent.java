@@ -27,9 +27,9 @@ public class Agent {
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private AgentProfile profile;
 
-    @ManyToOne
-    @JoinColumn(name = "city_id")
-    private City city;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "village_id", nullable = false)
+    private Village village;
 
     @ManyToMany
     @JoinTable(
@@ -82,12 +82,12 @@ public class Agent {
         this.profile = profile;
     }
 
-    public City getCity() {
-        return city;
+    public Village getVillage() {
+        return village;
     }
 
-    public void setCity(City city) {
-        this.city = city;
+    public void setVillage(Village village) {
+        this.village = village;
     }
 
     public List<Client> getClients() {

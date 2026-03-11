@@ -30,7 +30,7 @@ public class AgentController {
     @PostMapping
     @Operation(summary = "Create agent")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
-        content = @Content(examples = @ExampleObject(value = "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"profile\": {\n    \"bio\": \"Senior broker\",\n    \"licenseNumber\": \"LIC-12345\"\n  },\n  \"city\": { \"id\": 1 }\n}")))
+        content = @Content(examples = @ExampleObject(value = "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"profile\": {\n    \"bio\": \"Senior broker\",\n    \"licenseNumber\": \"LIC-12345\"\n  },\n  \"village\": { \"id\": 1 }\n}")))
     public ResponseEntity<Agent> createAgent(@RequestBody Agent agent) {
         Agent created = agentService.createAgent(agent);
         return ResponseEntity.status(201).body(created);

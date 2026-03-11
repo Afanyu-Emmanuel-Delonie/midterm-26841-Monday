@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.realestate.brokerage_crm.exception.ResourceNotFoundException;
 import com.realestate.brokerage_crm.model.Agent;
-import com.realestate.brokerage_crm.model.City;
 import com.realestate.brokerage_crm.model.Property;
+import com.realestate.brokerage_crm.model.Village;
 import com.realestate.brokerage_crm.repository.AgentRepository;
-import com.realestate.brokerage_crm.repository.CityRepository;
 import com.realestate.brokerage_crm.repository.PropertyRepository;
+import com.realestate.brokerage_crm.repository.VillageRepository;
 
 @Service
 public class PropertyService {
@@ -23,11 +23,11 @@ public class PropertyService {
     private AgentRepository agentRepository;
 
     @Autowired
-    private CityRepository cityRepository;
+    private VillageRepository villageRepository;
 
     // Create
     public Property createProperty(Property property) {
-        attachAgentAndCity(property);
+        attachAgentAndVillage(property);
         return propertyRepository.save(property);
     }
 
@@ -54,9 +54,9 @@ public class PropertyService {
             existing.setAgent(agent);
         }
 
-        if (payload.getCity() != null) {
-            City city = resolveCity(payload.getCity().getId());
-            existing.setCity(city);
+        if (payload.getVillage() != null) {
+            Village village = resolveVillage(payload.getVillage().getId());
+            existing.setVillage(village);
         }
 
         return propertyRepository.save(existing);
@@ -70,11 +70,11 @@ public class PropertyService {
         propertyRepository.deleteById(id);
     }
 
-    public List<Property> getPropertiesByCity(Long cityId) {
-        if (!cityRepository.existsById(cityId)) {
-            throw new ResourceNotFoundException("City not found");
+    public List<Property> getPropertiesByVillage(Long villageId) {
+        if (!villageRepository.existsById(villageId)) {
+            throw new ResourceNotFoundException("Village not found");
         }
-        return propertyRepository.findByCityId(cityId);
+        return propertyRepository.findByVillageId(villageId);
     }
 
     public List<Property> getPropertiesByAgent(Long agentId) {
@@ -84,9 +84,9 @@ public class PropertyService {
         return propertyRepository.findByAgentId(agentId);
     }
 
-    private void attachAgentAndCity(Property property) {
+    private void attachAgentAndVillage(Property property) {
         property.setAgent(resolveAgent(property.getAgent() != null ? property.getAgent().getId() : null));
-        property.setCity(resolveCity(property.getCity() != null ? property.getCity().getId() : null));
+        property.setVillage(resolveVillage(property.getVillage() != null ? property.getVillage().getId() : null));
     }
 
     private Agent resolveAgent(Long agentId) {
@@ -97,11 +97,11 @@ public class PropertyService {
                 .orElseThrow(() -> new ResourceNotFoundException("Agent not found"));
     }
 
-    private City resolveCity(Long cityId) {
-        if (cityId == null) {
-            throw new ResourceNotFoundException("City is required");
+    private Village resolveVillage(Long villageId) {
+        if (villageId == null) {
+            throw new ResourceNotFoundException("Village is required");
         }
-        return cityRepository.findById(cityId)
-                .orElseThrow(() -> new ResourceNotFoundException("City not found"));
+        return villageRepository.findById(villageId)
+                .orElseThrow(() -> new ResourceNotFoundException("Village not found"));
     }
 }

@@ -31,7 +31,7 @@ public class PropertyController {
     @PostMapping
     @Operation(summary = "Create property")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
-        content = @Content(examples = @ExampleObject(value = "{\n  \"title\": \"3BR Apartment\",\n  \"price\": 85000,\n  \"status\": \"AVAILABLE\",\n  \"agent\": { \"id\": 1 },\n  \"city\": { \"id\": 1 }\n}")))
+        content = @Content(examples = @ExampleObject(value = "{\n  \"title\": \"3BR Apartment\",\n  \"price\": 85000,\n  \"status\": \"AVAILABLE\",\n  \"agent\": { \"id\": 1 },\n  \"village\": { \"id\": 1 }\n}")))
     public ResponseEntity<Property> createProperty(@RequestBody Property property) {
         Property created = propertyService.createProperty(property);
         return ResponseEntity.status(201).body(created);
@@ -62,13 +62,13 @@ public class PropertyController {
         return ResponseEntity.noContent().build();
     }
 
-    // Filter by city or agent
+    // Filter by village or agent
     @GetMapping("/search")
     public ResponseEntity<List<Property>> searchProperties(
-            @RequestParam(required = false) Long cityId,
+            @RequestParam(required = false) Long villageId,
             @RequestParam(required = false) Long agentId) {
-        if (cityId != null) {
-            return ResponseEntity.ok(propertyService.getPropertiesByCity(cityId));
+        if (villageId != null) {
+            return ResponseEntity.ok(propertyService.getPropertiesByVillage(villageId));
         }
         if (agentId != null) {
             return ResponseEntity.ok(propertyService.getPropertiesByAgent(agentId));

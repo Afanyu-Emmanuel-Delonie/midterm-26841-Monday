@@ -5,12 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.realestate.brokerage_crm.model.City;
 import com.realestate.brokerage_crm.exception.DuplicateResourceException;
 import com.realestate.brokerage_crm.exception.ResourceNotFoundException;
 import com.realestate.brokerage_crm.model.Agent;
-import com.realestate.brokerage_crm.repository.CityRepository;
+import com.realestate.brokerage_crm.model.Village;
 import com.realestate.brokerage_crm.repository.AgentRepository;
+import com.realestate.brokerage_crm.repository.VillageRepository;
 
 @Service
 public class AgentService {
@@ -19,14 +19,14 @@ public class AgentService {
     private AgentRepository agentRepository;
 
     @Autowired
-    private CityRepository cityRepository;
+    private VillageRepository villageRepository;
 
     // Create
     public Agent createAgent(Agent agent) {
         if (agentRepository.existsByEmail(agent.getEmail())) {
             throw new DuplicateResourceException("Email already in use.");
         }
-        attachCity(agent);
+        attachVillage(agent);
         return agentRepository.save(agent);
     }
 
@@ -54,8 +54,8 @@ public class AgentService {
         existing.setName(payload.getName());
         existing.setEmail(payload.getEmail());
         existing.setProfile(payload.getProfile());
-        if (payload.getCity() != null) {
-            existing.setCity(attachCity(payload));
+        if (payload.getVillage() != null) {
+            existing.setVillage(attachVillage(payload));
         }
         return agentRepository.save(existing);
     }
@@ -68,13 +68,13 @@ public class AgentService {
         agentRepository.deleteById(id);
     }
 
-    private City attachCity(Agent agent) {
-        if (agent.getCity() == null || agent.getCity().getId() == null) {
-            return null;
+    private Village attachVillage(Agent agent) {
+        if (agent.getVillage() == null || agent.getVillage().getId() == null) {
+            throw new ResourceNotFoundException("Village is required");
         }
-        City city = cityRepository.findById(agent.getCity().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("City not found"));
-        agent.setCity(city);
-        return city;
+        Village village = villageRepository.findById(agent.getVillage().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Village not found"));
+        agent.setVillage(village);
+        return village;
     }
 }

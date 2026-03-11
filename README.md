@@ -1,6 +1,6 @@
 # Brokerage CRM (Spring Boot REST API)
 
-A simple real‑estate brokerage CRM API built with Spring Boot. It supports provinces/cities, agents, clients, properties, appointments, and transactions (with income distribution).
+A simple real-estate brokerage CRM API built with Spring Boot. It supports provinces/districts/sectors/villages, agents, clients, properties, appointments, and transactions (with income distribution).
 
 ## Tech Stack
 
@@ -33,16 +33,26 @@ mvn clean spring-boot:run
 
 ## Core Endpoints (Examples)
 
-### Provinces & Cities
+### Locations (Hierarchy)
 
 - `POST /api/v1/locations/provinces`
 ```json
 { "code": "RW-01", "name": "Kigali" }
 ```
 
-- `POST /api/v1/locations/provinces/{provinceId}/cities`
+- `POST /api/v1/locations/provinces/{provinceId}/districts`
 ```json
 { "name": "Gasabo" }
+```
+
+- `POST /api/v1/locations/districts/{districtId}/sectors`
+```json
+{ "name": "Kinyinya" }
+```
+
+- `POST /api/v1/locations/sectors/{sectorId}/villages`
+```json
+{ "name": "Gasharu" }
 ```
 
 - `GET /api/v1/locations/hierarchy`
@@ -55,7 +65,7 @@ mvn clean spring-boot:run
   "name": "John Doe",
   "email": "john@example.com",
   "profile": { "bio": "Senior broker", "licenseNumber": "LIC-12345" },
-  "city": { "id": 1 }
+  "village": { "id": 1 }
 }
 ```
 
@@ -80,7 +90,7 @@ mvn clean spring-boot:run
   "price": 85000,
   "status": "AVAILABLE",
   "agent": { "id": 1 },
-  "city": { "id": 1 }
+  "village": { "id": 1 }
 }
 ```
 
@@ -117,3 +127,58 @@ Commission logic:
 
 - If you change the database name, update `spring.datasource.url` in `src/main/resources/application.properties`.
 - All examples are also visible in Swagger UI with prefilled request bodies.
+
+## Database Test Queries (pgAdmin)
+
+```sql
+SELECT * FROM provinces;
+SELECT * FROM districts;
+SELECT * FROM sectors;
+SELECT * FROM villages;
+```
+
+```sql
+SELECT
+  p.name AS province,
+  d.name AS district,
+  s.name AS sector,
+  v.name AS village
+FROM villages v
+JOIN sectors s ON v.sector_id = s.id
+JOIN districts d ON s.district_id = d.id
+JOIN provinces p ON d.province_id = p.id
+ORDER BY p.name, d.name, s.name, v.name;
+```
+
+```sql
+SELECT
+  a.name AS agent,
+  a.email,
+  v.name AS village,
+  s.name AS sector,
+  d.name AS district,
+  p.name AS province
+FROM agent a
+JOIN villages v ON a.village_id = v.id
+JOIN sectors s ON v.sector_id = s.id
+JOIN districts d ON s.district_id = d.id
+JOIN provinces p ON d.province_id = p.id
+ORDER BY a.name;
+```
+
+```sql
+SELECT
+  pr.title,
+  pr.price,
+  pr.status,
+  v.name AS village,
+  s.name AS sector,
+  d.name AS district,
+  p.name AS province
+FROM properties pr
+JOIN villages v ON pr.village_id = v.id
+JOIN sectors s ON v.sector_id = s.id
+JOIN districts d ON s.district_id = d.id
+JOIN provinces p ON d.province_id = p.id
+ORDER BY pr.title;
+```
