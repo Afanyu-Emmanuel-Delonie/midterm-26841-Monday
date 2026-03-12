@@ -3,6 +3,8 @@ package com.realestate.brokerage_crm.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.realestate.brokerage_crm.exception.DuplicateResourceException;
@@ -35,10 +37,24 @@ public class AgentService {
         return agentRepository.findAll();
     }
 
+    // Read all (paged)
+    public Page<Agent> getAllAgents(Pageable pageable) {
+        return agentRepository.findAll(pageable);
+    }
+
     // Read one
     public Agent getAgentById(Long id) {
         return agentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Agent not found"));
+    }
+
+    public List<Agent> getAgentsByProvince(String code, String name) {
+        if ((code == null || code.isBlank()) && (name == null || name.isBlank())) {
+            throw new ResourceNotFoundException("Province code or name is required");
+        }
+        return agentRepository.findByProvinceCodeOrName(
+                (code == null || code.isBlank()) ? null : code,
+                (name == null || name.isBlank()) ? null : name);
     }
 
     // Update

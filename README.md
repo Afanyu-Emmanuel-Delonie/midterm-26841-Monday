@@ -10,6 +10,14 @@ A simple real-estate brokerage CRM API built with Spring Boot. It supports provi
 - PostgreSQL
 - Springdoc OpenAPI (Swagger UI)
 
+## Dependencies Used
+
+- `spring-boot-starter-webmvc`
+- `spring-boot-starter-data-jpa`
+- `postgresql`
+- `springdoc-openapi-starter-webmvc-ui` (Swagger UI)
+- `lombok` (used to reduce boilerplate in entities)
+
 ## How To Run
 
 1. Create a PostgreSQL database:
@@ -69,6 +77,11 @@ mvn clean spring-boot:run
 }
 ```
 
+- `GET /api/v1/agents?page=0&size=10&sort=name,asc`
+
+- `GET /api/v1/agents/by-province?code=RW-03`
+- `GET /api/v1/agents/by-province?name=Northern`
+
 ### Clients
 
 - `POST /api/v1/clients`
@@ -122,6 +135,48 @@ mvn clean spring-boot:run
 Commission logic:
 - Agent share: `salePrice * 0.05`
 - Company share: `salePrice * 0.02`
+
+## Assessment Mapping (Logic Explanation)
+
+### 1. ERD with at least five tables
+
+- Tables used: `provinces`, `districts`, `sectors`, `villages`, `agent`, `agent_profile`, `properties`, `clients`, `appointments`, `transactions`.
+- The core location hierarchy is `Province ? District ? Sector ? Village`.
+
+### 2. Saving Location
+
+- Locations are saved through nested endpoints in `LocationController`.
+- Each child entity is saved with its parent ID, and the service validates the parent exists before saving.
+
+### 3. Sorting and Pagination
+
+- Sorting and pagination are handled by Spring Data `Pageable` in `AgentController`.
+- Example: `GET /api/v1/agents?page=0&size=10&sort=name,asc`.
+- Pagination limits results per page and improves performance by avoiding large full-table fetches.
+
+### 4. Many-to-Many
+
+- `Agent` ? `Client` is Many-to-Many via join table `agent_clients`.
+- JPA maps this using `@ManyToMany` and `@JoinTable` in `Agent`.
+
+### 5. One-to-Many
+
+- `Province` ? `District` ? `Sector` ? `Village` is One-to-Many on each step.
+- Each child has a foreign key to its parent (e.g., `districts.province_id`).
+
+### 6. One-to-One
+
+- `Agent` ? `AgentProfile` is One-to-One using `@OneToOne` with `profile_id`.
+
+### 7. existsBy() Usage
+
+- Examples: `existsByEmail` in `AgentRepository`, `existsByNameAndProvinceId` in `DistrictRepository`.
+- Used to prevent duplicates before saving.
+
+### 8. Retrieve users by province code or name
+
+- Endpoint: `GET /api/v1/agents/by-province?code=RW-03` or `?name=Northern`.
+- Repository method joins `Agent ? Village ? Sector ? District ? Province` and filters by code or name.
 
 ## Notes
 

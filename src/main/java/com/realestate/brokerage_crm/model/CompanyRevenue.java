@@ -5,9 +5,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "company_revenue")
+@Getter
+@Setter
+@NoArgsConstructor
 public class CompanyRevenue {
 
     @Id
@@ -16,22 +22,5 @@ public class CompanyRevenue {
 
     private Double totalRevenue = 0.0;
 
-    public CompanyRevenue() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Double getTotalRevenue() {
-        return totalRevenue;
-    }
-
-    public void setTotalRevenue(Double totalRevenue) {
-        this.totalRevenue = totalRevenue;
-    }
+ 
 }

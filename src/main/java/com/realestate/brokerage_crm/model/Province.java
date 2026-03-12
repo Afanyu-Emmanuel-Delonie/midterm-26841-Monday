@@ -13,9 +13,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "provinces")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Province {
 
     @Id
@@ -32,38 +38,5 @@ public class Province {
     @OneToMany(mappedBy = "province", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<District> districts = new ArrayList<>();
 
-    public Province() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<District> getDistricts() {
-        return districts;
-    }
-
-    public void setDistricts(List<District> districts) {
-        this.districts = districts;
-    }
+ 
 }

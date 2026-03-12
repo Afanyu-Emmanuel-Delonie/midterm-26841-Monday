@@ -15,9 +15,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "sectors")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Sector {
 
     @Id
@@ -35,38 +41,5 @@ public class Sector {
     @OneToMany(mappedBy = "sector", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Village> villages = new ArrayList<>();
 
-    public Sector() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public District getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(District district) {
-        this.district = district;
-    }
-
-    public List<Village> getVillages() {
-        return villages;
-    }
-
-    public void setVillages(List<Village> villages) {
-        this.villages = villages;
-    }
+ 
 }

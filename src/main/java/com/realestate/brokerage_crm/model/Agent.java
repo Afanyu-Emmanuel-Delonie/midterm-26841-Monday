@@ -1,10 +1,9 @@
 package com.realestate.brokerage_crm.model;
 
-import jakarta.persistence.Entity;
-
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,8 +12,14 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Agent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,62 +44,5 @@ public class Agent {
     )
     private List<Client> clients;
 
-    public Agent() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Double getTotalEarnings() {
-        return totalEarnings;
-    }
-
-    public void setTotalEarnings(Double totalEarnings) {
-        this.totalEarnings = totalEarnings;
-    }
-
-    public AgentProfile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(AgentProfile profile) {
-        this.profile = profile;
-    }
-
-    public Village getVillage() {
-        return village;
-    }
-
-    public void setVillage(Village village) {
-        this.village = village;
-    }
-
-    public List<Client> getClients() {
-        return clients;
-    }
-
-    public void setClients(List<Client> clients) {
-        this.clients = clients;
-    }
+ 
 }
